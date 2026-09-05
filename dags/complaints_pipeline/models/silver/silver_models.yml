@@ -1,0 +1,17 @@
+
+
+models : 
+  - name: complaints_silver
+    description: "Cleansed data from bronze layer where the magic happens"
+    columns: 
+    - name: expediente
+      tests: 
+      - not_null
+  - name: dim_estado
+    description: "Dimensional table for the estados tbl"
+    columns:
+    - name: estado
+      tests:
+      - relationships:
+          to: ref('cat_estados')
+          field: ESTADO

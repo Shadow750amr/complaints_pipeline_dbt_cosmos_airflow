@@ -1,0 +1,39 @@
+
+datawh_certification.code-workspace
+# --- dbt Específicos ---
+target/
+logs/
+dbt_packages/
+dbt_modules/
+
+# --- Python y Entornos
+.venv/
+venv/
+env/
+bin/
+lib/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.python-version
+app.log
+
+
+*.db
+*.sqlite
+*.sqlite3
+*.csv
+*.xlsx
+
+# --- Configuración y Secretos ---
+profiles.yml
+.env
+.DS_Store
+.git
+airflow_settings.yaml
+astro
+.venv
+airflow-webserver.pid
+webserver_config.py
+airflow.cfg
+airflow.db
