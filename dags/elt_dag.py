@@ -1,4 +1,5 @@
-from airflow.decorators import dag,task,task_group
+from airflow.decorators import dag,task
+from airflow.sdk import Asset
 from src.data_extraction import Extraction
 from src.upload_to_s3 import upload_file
 from src.upload_to_snowflake import UploadToSnowflake
@@ -6,10 +7,19 @@ from utils.utils import URL,FILE_PATH
 import datetime
 import os
 
+# "Self-contained daily ETL pipeline built with the TaskFlow API and Asset approach for reusability and asset orchestration. 
+#  Orchestrates three sequential steps: local download, persistence to S3, and automated loading into Snowflake using a staging scheme.
 
+snowflake_complaints_asset = Asset(
+    uri="snowflake://{account}.snowflakecomputing.com/{database}/{schema}/{table}".format(
+        account=os.getenv('SNOWFLAKE_ACCOUNT'),
+        database=os.getenv('SNOWFLAKE_DATABASE'),
+        schema=os.getenv('SNOWFLAKE_SCHEMA'),
+        table=os.getenv('SNOWFLAKE_TABLE_NAME', 'COMPLAINTS')
+    )
+)
 
-
-@dag(start_date=datetime.datetime(2026, 9, 1),schedule='@daily',catchup=False)
+@dag(start_date=datetime.datetime(2026, 9, 6),schedule='@daily',catchup=False)
 def complaints_pipeline():
     @task(task_id="ejecutar_descarga")
     def descarga_archivo():
@@ -25,7 +35,7 @@ def complaints_pipeline():
             aws_conn_id='aws_default'
         )
     
-    @task(task_id="cargar_snowflake")
+    @task(task_id="cargar_snowflake",outlets=[snowflake_complaints_asset])
     def ingest_to_snowflake():
         uploader = UploadToSnowflake(
             user=os.getenv('SNOWFLAKE_USER'),

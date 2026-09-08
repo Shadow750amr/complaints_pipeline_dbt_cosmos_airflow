@@ -1,16 +1,17 @@
 from cosmos import DbtDag, ProjectConfig, ProfileConfig, ExecutionConfig
-
 from cosmos.profiles import SnowflakeUserPasswordProfileMapping 
-
+from elt_dag import snowflake_complaints_asset
 import os
 from datetime import datetime
 
 airflow_home = os.environ["AIRFLOW_HOME"]
 
+
+# uses and Asset to run the dbt models once the resource is been updated/created.
+
 profile_config = ProfileConfig(
     profile_name="default",
     target_name="dev",
-
     profile_mapping=SnowflakeUserPasswordProfileMapping(
         conn_id="snowflake_conn",
         profile_args={
@@ -26,10 +27,10 @@ my_cosmos_dag = DbtDag(
     ),
     profile_config=profile_config,
     execution_config=ExecutionConfig(
-        dbt_executable_path=f"{airflow_home}/dbt_venv/bin/dbt",
+        dbt_executable_path=f"/usr/local/airflow/dbt_venv/bin/dbt",
     ),
-    schedule_interval="@daily",
-    start_date=datetime(2026, 9, 1),
+    schedule=snowflake_complaints_asset,
+    start_date=datetime(2026, 9, 6),
     catchup=False,
     dag_id="dbt_dag",
     default_args={"retries": 1},

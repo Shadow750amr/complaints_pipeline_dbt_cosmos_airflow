@@ -1,5 +1,9 @@
-FROM quay.io/astronomer/astro-runtime:11.3.0
+FROM astrocrpublic.azurecr.io/runtime:3.3-7
 
-# Install dbt-snowflake into a virtual environment
+USER root
+
 RUN python -m venv dbt_venv && \
-    ./dbt_venv/bin/pip install --no-cache-dir dbt-snowflake
+    ./dbt_venv/bin/pip install --no-cache-dir --upgrade pip && \
+    ./dbt_venv/bin/pip install --no-cache-dir dbt-snowflake>=1.8.0
+
+USER astro

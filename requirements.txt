@@ -1,12 +1,13 @@
-# Proveedores principales
-astronomer-cosmos
+# principal providers
+astronomer-cosmos>=1.15.0
 apache-airflow-providers-snowflake
 apache-airflow-providers-amazon
-# Librerías para tus scripts de Python
+
+# python libraries
 pandas
 python-dotenv
 requests
 boto3
 
-# Opcional: si usas Slack para alertas
+# slack
 apache-airflow-providers-slack
