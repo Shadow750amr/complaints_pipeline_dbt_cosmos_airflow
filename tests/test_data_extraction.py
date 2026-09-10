@@ -1,7 +1,7 @@
 import pytest
 from src.data_extraction import Extraction
 
-def file_validation():
+def test_file_validation():
     with pytest.raises(ValueError):
-        file_validation(Extraction)
+        test_file_validation(Extraction)
     
